@@ -65,11 +65,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        mDishesViewModel.getDishes().observe(this){ searchResponse ->
-            mBinding.rvDishes.layoutManager = LinearLayoutManager(this@MainActivity)
-            mBinding.rvDishes.adapter =
-                DishesRvAdapter(this@MainActivity, searchResponse.recipes as ArrayList<RecipesItem>)
-        }
+//        mDishesViewModel.getDishes().observe(this){ searchResponse ->
+//            mBinding.rvDishes.layoutManager = LinearLayoutManager(this@MainActivity)
+//            mBinding.rvDishes.adapter =
+//                DishesRvAdapter(this@MainActivity, searchResponse.recipes as ArrayList<RecipesItem>)
+//        }
     }
 
     private fun getDishesUpdate(selection: String) {

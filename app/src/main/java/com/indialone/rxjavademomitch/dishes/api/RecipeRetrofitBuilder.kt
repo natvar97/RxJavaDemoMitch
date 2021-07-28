@@ -7,7 +7,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RecipeRetrofitBuilder {
 
-
+    // here usage of  addCallAdapterFactory() for specially RxJava which which convert response to
+    // rx java observable
 
     private fun getInstance(): Retrofit {
         return Retrofit.Builder()

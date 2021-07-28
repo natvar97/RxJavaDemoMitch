@@ -3,12 +3,14 @@ package com.indialone.rxjavademomitch.dishes
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.indialone.rxjavademomitch.R
 import com.indialone.rxjavademomitch.databinding.ActivityDishDetailsBinding
 import com.indialone.rxjavademomitch.dishes.api.RecipeRetrofitBuilder
 import com.indialone.rxjavademomitch.dishes.models.details.Recipe
 import com.indialone.rxjavademomitch.dishes.models.details.RecipeDetailsResponse
+import com.indialone.rxjavademomitch.mitch.ViewModelFactory
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -21,6 +23,7 @@ class DishDetailsActivity : AppCompatActivity() {
 
     private lateinit var mBinding: ActivityDishDetailsBinding
     private var dishId: String = ""
+    private lateinit var mDishesViewModel: DishesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +37,15 @@ class DishDetailsActivity : AppCompatActivity() {
             dishId = intent.getStringExtra(Constants.EXTRA_DISH_ID)!!
         }
 
+        mDishesViewModel =
+            ViewModelProvider(this, ViewModelFactory()).get(DishesViewModel::class.java)
+        mDishesViewModel.fetchDishDetails(recipeId = dishId)
+        mDishesViewModel.getDishDetails().observe(this) { recipeDetailsResponse ->
+            setUpUI(recipeDetailsResponse.recipe)
+        }
+
+        // mvc pattern
+        /*
         getDishDetailsObservable()
             .subscribe(object : Observer<RecipeDetailsResponse> {
                 override fun onSubscribe(d: Disposable) {
@@ -54,7 +66,7 @@ class DishDetailsActivity : AppCompatActivity() {
 
             })
 
-
+*/
     }
 
     private fun setUpActionBar() {
@@ -68,6 +80,8 @@ class DishDetailsActivity : AppCompatActivity() {
         mBinding.toolbarDishDetails.setNavigationOnClickListener { onBackPressed() }
     }
 
+    /*
+    // mvc pattern
     private fun getDishDetailsObservable(): Observable<RecipeDetailsResponse> {
         return RecipeRetrofitBuilder
             .recipeApiService
@@ -75,7 +89,7 @@ class DishDetailsActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
-
+*/
     private fun setUpUI(recipe: Recipe?) {
         mBinding.tvTitle.text = recipe!!.title
         mBinding.tvPublisher.text = recipe.publisher
